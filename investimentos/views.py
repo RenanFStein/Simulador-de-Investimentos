@@ -3,6 +3,7 @@ from rest_framework import viewsets, generics
 from .models import *
 from .serializer import *
 
+
 class OwnerViewSet(viewsets.ModelViewSet):
     """ ViewSet Dados do Owner """
     queryset = Owner.objects.all()
@@ -13,8 +14,6 @@ class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentSerializer      
 
-class WithdrawInvestmentViewSet(viewsets.ModelViewSet):
-    """ ViewSet Dados do Investment """
-    queryset = WithdrawInvestment.objects.all()
-    serializer_class = WithdrawInvestmentSerializer   
+
+ 
 

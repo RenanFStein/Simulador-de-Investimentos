@@ -10,6 +10,7 @@ from datetime import date, timedelta, datetime
 
 class OwnerSerializer(serializers.ModelSerializer):
     """ Serialização do model Owner """
+    
     class Meta:
         model = Owner
         fields = ['id', 'name']
@@ -22,7 +23,7 @@ class InvestmentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Investment
-        fields = ['id', 'owner', 'amount', 'created', 'withdrawal_forecast', 'rendimentos']
+        fields = ['id', 'owner', 'amount', 'created', 'withdrawal_forecast', 'rendimentos','retirada' , 'withdrawal']
 
     def validate_withdrawal_forecast(created, withdrawal_forecast):
         entrada = ((str((created.initial_data)["created"])).replace('-', '/'))
@@ -33,10 +34,21 @@ class InvestmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Previsão de saque não pode ser menor que a Data da Aplicação')      
         return withdrawal_forecast
 
-
-class WithdrawInvestmentSerializer(serializers.ModelSerializer):
-    """ Serialização do model WithdrawInvestment """
-    class Meta:
-        model = WithdrawInvestment
-        fields = ['id', 'investment', 'withdraw',  'amount']
+    def validate_withdrawal(created, withdrawal):
     
+        entrada = ((str((created.initial_data)["created"])).replace('-', '/'))
+        print(entrada)
+        entrada = (datetime.strptime(entrada, "%Y/%m/%d"))
+        print(entrada)
+        try:
+            retirada = (str(withdrawal)).replace('-', '/')
+        
+            retirada = (datetime.strptime(retirada, "%Y/%m/%d"))
+            if retirada < entrada:
+                raise serializers.ValidationError('Data de saque não pode ser menor que a data da Data da Aplicação')      
+            return withdrawal
+        except ValueError:            
+            return     
+        
+
+  

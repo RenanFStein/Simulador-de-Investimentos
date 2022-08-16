@@ -1,18 +1,16 @@
 from django.contrib import admin
 from .models import *
 
-
-
-
-class OwnerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')  
-admin.site.register(Owner, OwnerAdmin)
-
+class InvestmentInline(admin.TabularInline):
+    model = Investment
 
 class InvestmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'owner', 'amount', 'created', "withdrawal_forecast")   
+    list_display = ('id', 'owner', 'amount', 'created', "withdrawal_forecast", 'retirada', 'withdrawal')   
 admin.site.register(Investment, InvestmentAdmin)
 
-class WithdrawInvestmentAdmin(admin.ModelAdmin):
-    list_display = ('id','withdraw')   
-admin.site.register(WithdrawInvestment, WithdrawInvestmentAdmin)
+class OwnerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name') 
+    inlines = [
+        InvestmentInline, 
+       ]
+admin.site.register(Owner, OwnerAdmin)
