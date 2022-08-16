@@ -1,3 +1,4 @@
+from asyncore import read
 from cProfile import label
 from django.forms import ValidationError
 from rest_framework.views import exception_handler
@@ -33,8 +34,9 @@ class InvestmentSerializer(serializers.ModelSerializer):
         return withdrawal_forecast
 
 
-
-
-   
-            
-          
+class WithdrawInvestmentSerializer(serializers.ModelSerializer):
+    """ Serialização do model WithdrawInvestment """
+    class Meta:
+        model = WithdrawInvestment
+        fields = ['id', 'investment', 'withdraw',  'amount']
+    

@@ -13,3 +13,8 @@ class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentSerializer      
 
+class WithdrawInvestmentViewSet(viewsets.ModelViewSet):
+    """ ViewSet Dados do Investment """
+    queryset = WithdrawInvestment.objects.all()
+    serializer_class = WithdrawInvestmentSerializer   
+
