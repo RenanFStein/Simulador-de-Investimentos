@@ -17,12 +17,23 @@ class Owner(models.Model):
 
 
 class Investment(models.Model):
-    
+    BANK_CHOICES = (
+        ("1", "Banco do Brasil"),
+        ("2", "Caixa Econômica Federal"),
+        ("3", "Banco Itau"),
+        ("4", "Banco Bradesco"),
+        ("5", "Banco Santander"),
+        ("6", "Banco BTG"),
+        ("7", "Banco Inter"),
+        ("8", "XP Investimentos"),
+        
+    )
     owner = models.ForeignKey(Owner, verbose_name="Nome Investidor", on_delete=models.CASCADE, null=False, blank=False)
+    bank = models.CharField(max_length=1,verbose_name="Banco", choices=BANK_CHOICES, blank=False, null=False) 
     amount = models.PositiveIntegerField(verbose_name="Valor Investido")
-    created = models.DateField(verbose_name="Data da Aplicação", null=False)
-    withdrawal_forecast = models.DateField(verbose_name="Previsão de Saque", null=True)
-    withdrawal  = models.DateField(verbose_name="Saque da Aplicação", null=True)
+    created = models.DateField(verbose_name="Data da Aplicação", blank=False, null=False)
+    withdrawal_forecast = models.DateField(verbose_name="Previsão de Saque", blank=False, null=False)
+    withdrawal  = models.DateField(verbose_name="Saque da Aplicação", blank=True, null=True)
     def __str__(self):
         investment = f'Investidor(a) {str(self.owner)}, aplicado em {str(self.created)} o valor de {str(self.amount)}'
         return investment
@@ -31,75 +42,75 @@ class Investment(models.Model):
         verbose_name = "Investimento"
         verbose_name_plural = "Investimentos" 
 
-    def rendimentos(self):
-        dados = Investment.objects.filter(id=self.id).values('amount', 'created', 'withdrawal_forecast')
-        entrada =  (str(dados[0]['created']).replace('-', '/'))
-        entrada = (datetime.strptime(entrada, "%Y/%m/%d"))
-        previsao = (str(dados[0]['withdrawal_forecast']).replace('-', '/'))
-        previsao = (datetime.strptime(previsao, "%Y/%m/%d"))
+    def yield_investiment(self):
+        data = Investment.objects.filter(id=self.id).values('amount', 'created', 'withdrawal_forecast')
+        data_entry =  (str(data[0]['created']).replace('-', '/'))
+        data_entry = (datetime.strptime(data_entry, "%Y/%m/%d"))
+        forecast_data = (str(data[0]['withdrawal_forecast']).replace('-', '/'))
+        forecast_data = (datetime.strptime(forecast_data, "%Y/%m/%d"))
        
         try:         
             
-            if  (int((str(abs(entrada - previsao)/30)).split()[0])) > 0: 
+            if  (int((str(abs(data_entry - forecast_data)/30)).split()[0])) > 0: 
                 
                
-                rendimento = (float(dados[0]['amount']) * (1.0052) ** (float((str(abs(entrada - previsao)/30)).split()[0]))) - (float(dados[0]['amount']))
+                yields = (float(data[0]['amount']) * (1.0052) ** (float((str(abs(data_entry - forecast_data)/30)).split()[0]))) - (float(data[0]['amount']))
               
-                if (int((str(abs(entrada - previsao))).split()[0])) < 360:
+                if (int((str(abs(data_entry - forecast_data))).split()[0])) < 360:
                 
-                    tributacao = rendimento * 0.225
-                    percentual = "22,5%"
+                    taxation = yields * 0.225
+                    tax_percentage = "22,5%"
                
-                elif (int((str(abs(entrada - previsao))).split()[0])) < 720:
+                elif (int((str(abs(data_entry - forecast_data))).split()[0])) < 720:
                    
-                    tributacao = rendimento * 0.185
-                    percentual = "18,5%"
+                    taxation = yields * 0.185
+                    tax_percentage = "18,5%"
                    
                 else:
                   
-                    tributacao = rendimento * 0.150
-                    percentual = "15%"
+                    taxation = yields * 0.150
+                    tax_percentage = "15%"
               
-                retorno = (float(dados[0]['amount']) * (1.0052) ** (float((str(abs(entrada - previsao)/30)).split()[0]))) - tributacao
-                return {"rendimento":'{0:.2f}'.format(rendimento), 
-                        "tributacao":'{0:.2f}'.format(tributacao), 
-                        "percentual": percentual,
-                        "saldo": '{0:.2f}'.format(retorno)}     
+                return_investment = (float(data[0]['amount']) * (1.0052) ** (float((str(abs(data_entry - forecast_data)/30)).split()[0]))) - taxation
+                return {"yields":'{0:.2f}'.format(yields), 
+                        "taxation":'{0:.2f}'.format(taxation), 
+                        "tax_percentage": tax_percentage,
+                        "saldo": '{0:.2f}'.format(return_investment)}     
         except ValueError:
-            saldo = 'Em Aplicação'
-            return saldo       
+            balance = 'Em Aplicação'
+            return balance       
 
-    def retirada(self):
-        dados = Investment.objects.filter(id=self.id).values('amount', 'created', 'withdrawal')
-        entrada =  (str(dados[0]['created']).replace('-', '/'))     
-        entrada = (datetime.strptime(entrada, "%Y/%m/%d"))        
-        saque = (str(dados[0]['withdrawal']).replace('-', '/'))
+    def withdrawal_investiment(self):
+        data = Investment.objects.filter(id=self.id).values('amount', 'created', 'withdrawal')
+        data_entry =  (str(data[0]['created']).replace('-', '/'))     
+        data_entry = (datetime.strptime(data_entry, "%Y/%m/%d"))        
+        saque = (str(data[0]['withdrawal']).replace('-', '/'))
         
         try:             
             saque = (datetime.strptime(saque, "%Y/%m/%d"))
-            if  (int((str(abs(entrada - saque)/30)).split()[0])) > 0: 
-                rendimento = (float(dados[0]['amount']) * (1.0052) ** (float((str(abs(entrada - saque)/30)).split()[0]))) - (float(dados[0]['amount']))
+            if  (int((str(abs(data_entry - saque)/30)).split()[0])) > 0: 
+                yields = (float(data[0]['amount']) * (1.0052) ** (float((str(abs(data_entry - saque)/30)).split()[0]))) - (float(data[0]['amount']))
               
-                if (int((str(abs(entrada - saque))).split()[0])) < 360:
+                if (int((str(abs(data_entry - saque))).split()[0])) < 360:
                 
-                    tributacao = rendimento * 0.225
-                    percentual = "22,5%"
+                    taxation = yields * 0.225
+                    tax_percentage = "22,5%"
                
-                elif (int((str(abs(entrada - saque))).split()[0])) < 720:
+                elif (int((str(abs(data_entry - saque))).split()[0])) < 720:
                    
-                    tributacao = rendimento * 0.185
-                    percentual = "18,5%"
+                    taxation = yields * 0.185
+                    tax_percentage = "18,5%"
                    
                 else:
                   
-                    tributacao = rendimento * 0.150
-                    percentual = "15%"
+                    taxation = yields * 0.150
+                    tax_percentage = "15%"
               
-                retorno = (float(dados[0]['amount']) * (1.0052) ** (float((str(abs(entrada - saque)/30)).split()[0]))) - tributacao
-                return '{0:.2f}'.format(retorno)    
+                return_investment = (float(data[0]['amount']) * (1.0052) ** (float((str(abs(data_entry - saque)/30)).split()[0]))) - taxation
+                return '{0:.2f}'.format(return_investment)    
       
         except ValueError:
-            saldo = 'Em Aplicação'
-            return saldo         
+            balance = 'Em Aplicação'
+            return balance         
           
    
