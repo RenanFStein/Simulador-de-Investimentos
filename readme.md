@@ -7,7 +7,10 @@
 * Rode as migrações.
 
 ## Documentação da API
+Documentação com Swagger:
 https://investiments-api.herokuapp.com/
+
+Serializer Django Rest:
 https://investiments-api.herokuapp.com/api/
 #
 ![image](https://user-images.githubusercontent.com/81093045/185272346-83d2b7a5-0a67-4ad0-ba93-d586942b32ba.png)
