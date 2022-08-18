@@ -5,7 +5,7 @@ class InvestmentInline(admin.TabularInline):
     model = Investment
 
 class InvestmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'owner', 'amount', 'created', "withdrawal_forecast", 'retirada', 'withdrawal')   
+    list_display = ('id', 'owner','bank', 'amount', 'created', "withdrawal_forecast", 'withdrawal_investiment', 'withdrawal')   
 admin.site.register(Investment, InvestmentAdmin)
 
 class OwnerAdmin(admin.ModelAdmin):

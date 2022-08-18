@@ -5,14 +5,16 @@ from .serializer import *
 
 
 class OwnerViewSet(viewsets.ModelViewSet):
-    """ ViewSet Dados do Owner """
+    """ ViewSet Dados Owner """
     queryset = Owner.objects.all()
     serializer_class = OwnerSerializer    
-
+    http_method_names = ['get'] 
 class InvestmentViewSet(viewsets.ModelViewSet):
-    """ ViewSet Dados do Investment """
+    """ ViewSet Dados Investment """
     queryset = Investment.objects.all()
-    serializer_class = InvestmentSerializer      
+    serializer_class = InvestmentSerializer     
+    http_method_names = ['get', 'post'] 
+    
 
 
  
