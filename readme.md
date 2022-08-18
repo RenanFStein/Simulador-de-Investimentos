@@ -6,3 +6,5 @@
 * Instale as dependências.
 * Rode as migrações.
 
+## Documentação da API
+https://investiments-api.herokuapp.com/
